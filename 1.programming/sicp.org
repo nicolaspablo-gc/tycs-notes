@@ -92,7 +92,7 @@
   expressing ideas about methodology.
   #+end_quote
 
-- Procedural epitemology quote
+- Procedural epistemology quote
 
   <<preface-1e-procedural-epistemology-quote>>
   #+begin_quote
@@ -103,6 +103,7 @@
   of "what is."  Computation provides a framework for dealing
   precisely with notions of "how to."
   #+end_quote
+
 
 ** [[info:sicp#Chapter 1][Building Abstractions With Procedures]]
 
@@ -115,6 +116,7 @@
   behaviour of a process, to avoid errors.
 
 - Modular design: new parts can be made or replaced indepently.
+
 
 *** The Elements of Programming
 
