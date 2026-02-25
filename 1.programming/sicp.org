@@ -1,0 +1,375 @@
+* Personal Glossary
+
+- <<idiom>> <<idioms>> ::
+
+  - plural: small, standard correct structures used in composing
+    greater progams.  See the [[foreword-idiom-definition-quote]]
+
+- <<algorithm>> ::
+
+  - A program that perform a precise mathematical function, where is
+    desired that they behave optimally, specially regarding execution
+    time and storage.  See the [[foreword-algorithm-definition-quote]]
+
+- <<procedural epistemology>> ::
+
+  - Study of the structure of knowledge in an imperative point of
+    view.  It answers ‘how to’ instead of ‘what is’.  See
+    [[preface-1e-procedural-epistemology-quote]]
+
+- <<process>> ::
+
+  - For a lax description, see [[Process, data, and program]]
+
+- <<data>> ::
+
+  - For a lax description, see [[Process, data, and program]]
+
+- <<program>> ::
+
+  - For a lax description, see [[Process, data, and program]]
+
+- <<interpreter>> ::
+
+- <<LISP>> ::
+
+  - LISt Processing
+
+* Notes
+
+** [[info:sicp#Foreword][Foreword]]
+
+- Sets three foci of consideration:
+
+  - The mind: every program is a model that starts in the mind
+
+  - Collection of computer programs: a knowledge of correct idioms and
+    proven techniques for combination of them helps in structuring
+    programs.
+
+  - The computer: the computer obeys the laws of physics, another.
+
+- Idioms definition quote:
+
+  <<foreword-idiom-definition-quote>>
+  #+begin_quote
+  (...) complete formal arguments of correctness seldom accompany large
+  programs.  Since large programs grow from small ones, it is crucial
+  that we develop an arsenal of standard program structures of whose
+  correctness we have become sure--we call them idioms--and learn to
+  combine them into larger structures using organizational techniques of
+  proven value.
+  #+end_quote
+
+- Algorithm definition quote:
+
+  <<foreword-algorithm-definition-quote>>
+  #+begin_quote
+  Among the programs we write, some (but never enough) perform a
+  precise mathematical function such as sorting or finding the maximum
+  of a sequence of numbers, determining primality, or finding the
+  square root.  We call such programs algorithms, and a great deal is
+  known of their optimal behavior, particularly with respect to the
+  two important parameters of execution time and data storage
+  requirements.
+  #+end_quote
+
+- Advice
+
+  #+begin_quote
+  A programmer should acquire good algorithms and idioms.
+  #+end_quote
+
+
+** [[info:sicp#Preface 1e][Preface 1e]]
+
+- Computer programs as a formal medium for expressing methodological
+  ideas
+
+  #+begin_quote
+  (...) a computer language is not just a way of getting a computer to
+  perform operations but rather that it is a novel formal medium for
+  expressing ideas about methodology.
+  #+end_quote
+
+- Procedural epitemology quote
+
+  <<preface-1e-procedural-epistemology-quote>>
+  #+begin_quote
+  (...) "procedural epistemology" -- the study of the structure of
+  knowledge from an imperative point of view, as opposed to the more
+  declarative point of view taken by classical mathematical subjects.
+  Mathematics provides a framework for dealing precisely with notions
+  of "what is."  Computation provides a framework for dealing
+  precisely with notions of "how to."
+  #+end_quote
+
+** [[info:sicp#Chapter 1][Building Abstractions With Procedures]]
+
+- <<Process, data, and program>>
+  - process :: beings that inhabits a computer
+  - data :: abstract things manipulated by processes
+  - program :: pattern of rules that directs a process
+
+- Good engineering: Given a program, anticipate and visualize the
+  behaviour of a process, to avoid errors.
+
+- Modular design: new parts can be made or replaced indepently.
+
+*** The Elements of Programming
+
+**** Expressions
+
+**** Naming and the Environment
+
+**** Evaluating Combinations
+
+**** Compound Procedures
+
+**** The Substitution Model for Procedure Application
+
+**** Conditional Expressions and Predicates
+
+**** Example: Square Roots by Newton's Method
+
+**** Procedures as Black-Box Abstractions
+
+*** Procedures and the Processes They Generate
+
+*** Linear Recursion and Iteration
+
+**** Tree Recursion
+
+**** Orders of Growth
+
+**** Exponentiation
+
+**** Greatest Common Divisors
+
+**** Example: Testing for Primality
+
+*** Formulating Abstractions with Higher-Order Procedures
+
+**** Procedures as Arguments
+
+**** Constructing Procedures Using `Lambda'
+
+**** Procedures as General Methods
+
+**** Procedures as Returned Values
+
+** Building Abstractions with Data
+
+*** Introduction to Data Abstraction
+
+**** Example: Arithmetic Operations for Rational Numbers
+
+**** Abstraction Barriers
+
+**** What Is Meant by Data?
+
+**** Extended Exercise: Interval Arithmetic
+
+*** Hierarchical Data and the Closure Property
+
+**** Representing Sequences
+
+**** Hierarchical Structures
+
+**** Sequences as Conventional Interfaces
+
+**** Example: A Picture Language
+
+*** Symbolic Data
+
+**** Quotation
+
+**** Example: Symbolic Differentiation
+
+**** Example: Representing Sets
+
+**** Example: Huffman Encoding Trees
+
+*** Multiple Representations for Abstract Data
+
+**** Representations for Complex Numbers
+
+**** Tagged data
+
+**** Data-Directed Programming and Additivity
+
+*** Systems with Generic Operations
+
+**** Generic Arithmetic Operations
+
+**** Combining Data of Different Types
+
+**** Example: Symbolic Algebra
+
+** Modularity, Objects, and State
+
+*** Assignment and Local State
+
+**** Local State Variables
+
+**** The Benefits of Introducing Assignment
+
+**** The Costs of Introducing Assignment
+
+*** The Environment Model of Evaluation
+
+**** The Rules for Evaluation
+
+**** Applying Simple Procedures
+
+**** Frames as the Repository of Local State
+
+**** Internal Definitions
+
+*** Modeling with Mutable Data
+
+**** Mutable List Structure
+
+**** Representing Queues
+
+**** Representing Tables
+
+**** A Simulator for Digital Circuits
+
+**** Propagation of Constraints
+
+*** Concurrency: Time Is of the Essence
+
+**** The Nature of Time in Concurrent Systems
+
+**** Mechanisms for Controlling Concurrency
+
+*** Streams
+
+**** Streams Are Delayed Lists
+
+**** Infinite Streams
+
+**** Exploiting the Stream Paradigm
+
+**** Streams and Delayed Evaluation
+
+**** Modularity of Functional Programs and Modularity of Objects
+
+** Metalinguistic Abstraction
+
+*** The Metacircular Evaluator
+
+**** The Core of the Evaluator
+
+**** Representing Expressions
+
+**** Evaluator Data Structures
+
+**** Running the Evaluator as a Program
+
+**** Data as Programs
+
+**** Internal Definitions
+
+**** Separating Syntactic Analysis from Execution
+
+*** Variations on a Scheme -- Lazy Evaluation
+
+**** Normal Order and Applicative Order
+
+**** An Interpreter with Lazy Evaluation
+
+**** Streams as Lazy Lists
+
+*** Variations on a Scheme -- Nondeterministic Computing
+
+**** Amb and Search
+
+**** Examples of Nondeterministic Programs
+
+**** Implementing the `Amb' Evaluator
+
+*** Logic Programming
+
+**** Deductive Information Retrieval
+
+**** How the Query System Works
+
+**** Is Logic Programming Mathematical Logic?
+
+**** Implementing the Query System
+
+*** Implementing the Query System
+
+**** The Driver Loop and Instantiation
+
+**** The Evaluator
+
+**** Finding Assertions by Pattern Matching
+
+**** Rules and Unification
+
+**** Maintaining the Data Base
+
+**** Stream Operations
+
+**** Query Syntax Procedures
+
+**** Frames and Bindings
+
+** Computing with Register Machines
+
+*** Designing Register Machines
+
+**** A Language for Describing Register Machines
+
+**** Abstraction in Machine Design
+
+**** Subroutines
+
+**** Using a Stack to Implement Recursion
+
+**** Instruction Summary
+
+*** A Register-Machine Simulator
+
+**** The Machine Model
+
+**** The Assembler
+
+**** Generating Execution Procedures for Instructions
+
+**** Monitoring Machine Performance
+
+*** Storage Allocation and Garbage Collection
+
+**** Memory as Vectors
+
+**** Maintaining the Illusion of Infinite Memory
+
+*** The Explicit-Control Evualtor
+
+**** The Core of the Explicit-Control Evaluator
+
+**** Sequence Evaluation and Tail Recursion
+
+**** Conditionals, Assignments, and Definitions
+
+**** Running the Evaluator
+
+*** Compilation
+
+**** Structure of the Compiler
+
+**** Compiling Expressions
+
+**** Compiling Combinations
+
+**** Combining Instruction Sequences
+
+**** An Example of Compiled Code
+
+**** Lexical Addressing
+
+**** Interfacing Compiled Code to the Evaluator
