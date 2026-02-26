@@ -1,5 +1,28 @@
 * Personal Glossary
 
+- <<prefix notation>> ::
+
+  - Putting the operator to the left of the operands.  Contrast it to
+    ‘infix notation’, for example, in addition:
+
+    - prefix notation: ~+ 1 2 3 4 5~
+    - infix notation: ~1 + 2 + 3 + 4 + 5~
+
+- <<primitive>> ::
+
+- <<expression>> ::
+
+  - Something that can be ‘evaluated’, ie, resolves to a value.
+
+  - There are [[primitive expressions]], example, a number (evaluates to
+    the number value), and there are [[compound expressions]], for
+    example, a procedure application over its arguments (which is a
+    combination made of sub expressions).
+
+- <<programming language>> ::
+
+  - [[programing-language-process-idea-framework][Framework for organizing ideas about processes.]]
+
 - <<idiom>> <<idioms>> ::
 
   - plural: small, standard correct structures used in composing
@@ -35,19 +58,19 @@
 
   - LISt Processing
 
+
 * Notes
 
 ** [[info:sicp#Foreword][Foreword]]
 
 - Sets three foci of consideration:
 
-  - The mind: every program is a model that starts in the mind
+  - The mind:  Every program is a model that starts in the mind.
 
   - Collection of computer programs: a knowledge of correct idioms and
-    proven techniques for combination of them helps in structuring
-    programs.
+    proven techniques for combining them.
 
-  - The computer: the computer obeys the laws of physics, another.
+  - The computer: The computer obeys the laws of physics, another model.
 
 - Idioms definition quote:
 
@@ -83,8 +106,8 @@
 
 ** [[info:sicp#Preface 1e][Preface 1e]]
 
-- Computer programs as a formal medium for expressing methodological
-  ideas
+- Computer programs can be a formal medium for expressing
+  methodological ideas:
 
   #+begin_quote
   (...) a computer language is not just a way of getting a computer to
@@ -107,24 +130,111 @@
 
 ** [[info:sicp#Chapter 1][Building Abstractions With Procedures]]
 
-- <<Process, data, and program>>
+- <<Process, data, and program>> :
   - process :: beings that inhabits a computer
   - data :: abstract things manipulated by processes
   - program :: pattern of rules that directs a process
 
-- Good engineering: Given a program, anticipate and visualize the
-  behaviour of a process, to avoid errors.
+  So we could say, a process, the thing living in the computer,
+  manipulates data directed by the program.
 
-- Modular design: new parts can be made or replaced indepently.
+- On good engineering:
+
+  - Organize programs in such a way that:
+
+    - We can be reasonable sure they will perform the intended tasks.
+    - Unanticipated problems don’t lead to catastrophe.
+    - Problems can be debugged.
+    - Are modular: new parts can be made or replaced indepently.
+
+  - Visualize process behaviour in advance
 
 
-*** The Elements of Programming
+*** [[info:sicp#1-1][The Elements of Programming]]
 
-**** Expressions
+- On programming languages:
 
-**** Naming and the Environment
+  - Its a framework for organizing ideas about processes.
+    <<programing-language-process-idea-framework>>
+
+  - Provides means for combining simple ideas into complex ideas.
+
+  - A model for understanding languages:  Every powerful language
+    provides the following three mechanisms:
+
+    - Primitive expressions: simplest entities the language is
+      concerned with
+
+    - Means of combination: use to make compound elements
+
+    - Means of abstraction: by which compound elements can be *named*
+      and manipulated as units.
+
+
+**** [[info:sicp#1-1-1][Expressions]]
+
+- [[expression]] (in glossary)
+
+- An statement/description that can be evaluated, ie, reduced to a
+  single value.
+
+- There are <<primitive expressions>> :
+
+  - Representing numbers: for integers, the numbers typed as
+    themselves, evaluate to those numbers:
+
+    #+begin_src scheme
+      27
+    #+end_src
+
+    #+RESULTS:
+    : 27
+
+  - representing procedures: for example, the procedure to add ‘+’
+    is a primitive procedure.
+
+- And there are <<compound expressions>> :
+
+  - Like those representing procedure application.  For example, add
+    ‘+’ can be combined with number expressions to represent the
+    adding application, ie, sum:
+
+    #+begin_src scheme
+      (+ 1 2 3 4 5)
+    #+end_src
+
+    #+RESULTS:
+    : 15
+
+    This type of compound expression representing procedure
+    application will be called a /combination/.  In a combination, the
+    first element is the operator and the rest are the operands.
+    Putting the operator first and the arguments later is called
+    [[prefix notation]].
+
+
+**** [[info:sicp#1-1-2][Naming and the Environment]]
+
+- Languages allow /to name/ computational objects
+
+- A name identifies a "variable", whose "value" is a computational object.
+
 
 **** Evaluating Combinations
+
+TODO: refactor this
+the combination’s result value is obtained by evaluating each
+expression of the combination, and applying the first
+element’s value (the operation) to the arguments (the value
+of the rest of the operators, when evaluated).
+
+Personal note: This is not so different of other programming
+languages with infix notation, ~1 + 2 + 3 + 4 + 5~, the add
+operation takes two arguments, the expression ‘1 + 2’ evaluates
+the left side, the right side, and /then/ applies the addition on
+the arguments.
+
+
 
 **** Compound Procedures
 
