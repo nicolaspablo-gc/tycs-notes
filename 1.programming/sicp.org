@@ -8,6 +8,9 @@
     - prefix notation: ~+ 1 2 3 4 5~
     - infix notation: ~1 + 2 + 3 + 4 + 5~
 
+    See also some [[prefix-notation-advantages][advantages of using prefix notation for procedure
+    application]]
+
 - <<primitive>> ::
 
 - <<expression>> ::
@@ -154,21 +157,38 @@
 
 - On programming languages:
 
-  - Its a framework for organizing ideas about processes.
-    <<programing-language-process-idea-framework>>
+  - They can be understood as a framework for organizing ideas about
+    processes.  <<programing-language-process-idea-framework>>
 
-  - Provides means for combining simple ideas into complex ideas.
+    Thus when thinking about a language we should ask ourselves, what
+    are the means the language provides for combining simple ideas
+    into complex ideas?
 
-  - A model for understanding languages:  Every powerful language
-    provides the following three mechanisms:
+  - In regards to organizing ideas about processes, powerful
+    languages provides the following mechanisms:
 
-    - Primitive expressions: simplest entities the language is
-      concerned with
+    - Primitive expressions: Simplest entities the language is
+      concerned with.
 
-    - Means of combination: use to make compound elements
+    - Means of combination: Used to make compound elements.
 
     - Means of abstraction: by which compound elements can be *named*
       and manipulated as units.
+
+    :personal-note:
+    Here we are reasonating about ‘processes’ (not about data, or data
+    structures, for example).  When it’s said about primitive
+    expressions that they are entities/elements, the meaning is of
+    objects that produce values when ‘evaluated’.
+    :end:
+
+    This dynamic objects can be combined to make compound evaluable
+    objects, and abstracted with names to reffer to the compound
+    expression with a name.
+
+  - Altough the same is also true about data, programming languages
+    should provide these mechanisms for both using / describing /
+    defining and combining data and procedures.
 
 
 **** [[info:sicp#1-1-1][Expressions]]
@@ -193,9 +213,16 @@
   - representing procedures: for example, the procedure to add ‘+’
     is a primitive procedure.
 
+    #+begin_src scheme
+      +
+    #+end_src
+
+    #+RESULTS:
+    : #<procedure + (#:optional _ _ . _)>
+
 - And there are <<compound expressions>> :
 
-  - Like those representing procedure application.  For example, add
+  - Representing procedure application.  For example, add
     ‘+’ can be combined with number expressions to represent the
     adding application, ie, sum:
 
@@ -206,11 +233,70 @@
     #+RESULTS:
     : 15
 
-    This type of compound expression representing procedure
+  - This type of compound expression representing procedure
     application will be called a /combination/.  In a combination, the
     first element is the operator and the rest are the operands.
+
     Putting the operator first and the arguments later is called
     [[prefix notation]].
+
+    :personal-note:
+    I guess its called combination as in, combination of expressions.
+    The combination in itself its also an expression, because it
+    evaluates, it produces a value.  Simple ideas get combined to
+    represent a complex idea.  The framework for thinking about
+    processes: define simple ideas, define a way to combine them,
+    create complex ideas through the combinations.
+
+    It makes me remember of factoring in math.  You can think of
+    big numbers as the product of their prime factors.  This
+    decomposition can help us: by performing easier steps first (for
+    example, canceling factors by divisors), calculating the result
+    (that is, evaluating) becomes much easier.
+    :end:
+
+  - Prefix notation has the following advantages in regarding to
+    procedure application <<prefix-notation-advantages>> :
+
+    - Being able to accomodate an arbitrary number of arguments.
+
+      - infix sum, always takes two args: ~1 + 2~, that is,
+        ~left + right~
+
+      - prefix sum can take any: ~+ 1 2 3 4 5 ... n~
+
+    - Unambigous order of operations: The operator is always the first
+      element, and each operation is always delimited.
+
+      In infix notation, we require to know the arity of each
+      operation, and we need parenthesis to override the natural
+      order of each operation.  For example:
+
+      #+begin_src python
+        return 1 + 2 * 3 - 1 / 2
+      #+end_src
+
+      #+RESULTS:
+      : 6.5
+
+      The general rule is, first multiply and divide in the order of
+      appareance, then add and substract in order of appearance.
+
+      In prefix notation theres no need to know arity, every operation
+      is delimited:
+
+      #+begin_src scheme
+        (- (+ 1
+              (* 2 3))
+           (/ 1 2))
+      #+end_src
+
+      #+RESULTS:
+      : 13/2
+
+- The interpreter works by evaluating expressions one and a time, and
+  printing their results.  That is why it’s said that it works in a
+  ‘read-eval-print’ loop, also know as ‘repl’
 
 
 **** [[info:sicp#1-1-2][Naming and the Environment]]
