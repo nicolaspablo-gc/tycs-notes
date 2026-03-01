@@ -1,5 +1,7 @@
 * Personal Glossary
 
+- <<environment>> :
+
 - <<prefix notation>> ::
 
   - Putting the operator to the left of the operands.  Contrast it to
@@ -265,6 +267,8 @@
 
       - prefix sum can take any: ~+ 1 2 3 4 5 ... n~
 
+      This applies for any operation.
+
     - Unambigous order of operations: The operator is always the first
       element, and each operation is always delimited.
 
@@ -301,9 +305,47 @@
 
 **** [[info:sicp#1-1-2][Naming and the Environment]]
 
-- Languages allow /to name/ computational objects
+- Languages allow to /refer/ to computational objects *by name*.
 
-- A name identifies a "variable", whose "value" is a computational object.
+- A name identifies a "variable" whose "value" *is* the computational
+  object:
+
+  : name -> variable -> value
+
+  By the name we identify and refer to the variable, which holds the
+  computational object.
+
+  :personal-note:
+  Its worth noting that just as in real life, the word is no the thing
+  (the word "dog" is not the dog), its just used to refer to it.
+  Thats why the name can also be called a symbol; as in, symbols
+  refers to things, as in, the symbol "dog" refers to a dog.
+  :end:
+
+- We should ask ourselves, what means do any specific language
+  provides for naming computational objects objects.
+
+  In scheme we use ‘define’:
+
+  #+begin_src scheme
+    (define size 2)
+    size
+  #+end_src
+
+  #+RESULTS:
+  : 2
+
+  From now on we can refer to this object (number two) by the name
+  ‘size’.
+
+- Naming is one of our means of /abstraction/.  We don’t need to
+  replicate all the details of complex computational objects each time
+  we want to use them; we just refer to them by name.
+
+- The ability to associate a symbol with a value, and later retrieve
+  that value by the symbol name, means that the interpreter must keep
+  track of those name-value associations in some kind of memory.  This
+  "memory" is called an [[environment]], and there can be many environments.
 
 
 **** Evaluating Combinations
