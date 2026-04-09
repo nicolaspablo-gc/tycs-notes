@@ -1,3 +1,21 @@
 #+title: Teach Yourself Computer Science - Nico’s Notes
 
-site: https://teachyourselfcs.com/
+These are my personal notes on Teach Yourself Computer Science, a free
+course that you can find in https://teachyourselfcs.com/.
+
+For each topic, I’ll leave here some relevant links.
+
+* Programming
+:PROPERTIES:
+:ID: bd7a2a35-bbc2-49d2-9135-b449e868b46b
+:END:
+
+- my notes: [[file:1.programming/sicp.org]]
+- book (in info format): [[file:1.programming/sicp.info]]
+- lectures:
+  - videos: https://archive.org/details/ucberkeley-webcast-PL3E89002AA9B9879E?sort=title
+  - course material: https://people.eecs.berkeley.edu/~bh/61a-pages/
+  - simply scheme: https://archive.org/details/simply_202209
+    - local file at: [[file:1.programming/simply.scm]]
+  - stklos: https://stklos.net/download.html
+- more excersises: https://exercism.org/
