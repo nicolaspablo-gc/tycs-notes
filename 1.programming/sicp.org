@@ -1,3 +1,9 @@
+#+title: Nico’s SICP notes
+
+These are the notes for the second edition, which is authored by by
+Harold Abelson and Gerald Jay Sussman, with Julie Sussman
+
+
 * Personal Glossary
 
 - <<environment>> :
@@ -63,12 +69,19 @@
 
   - LISt Processing
 
+- <<special form>> ::
+
+  - A form that doesn’t evaluate according to the rules of the
+    [[general evaluation rule]]
+
 
 * Notes
 
-** [[info:sicp#Foreword][Foreword]]
+** Foreword
+[[info:sicp#Foreword]]
+Foreword written by Alan J Perlis.
 
-- Sets three foci of consideration:
+- The subject matter sets three foci of consideration:
 
   - The mind:  Every program is a model that starts in the mind.
 
@@ -109,7 +122,8 @@
   #+end_quote
 
 
-** [[info:sicp#Preface 1e][Preface 1e]]
+** Preface 1e
+[[info:sicp#Preface 1e]]
 
 - Computer programs can be a formal medium for expressing
   methodological ideas:
@@ -133,7 +147,10 @@
   #+end_quote
 
 
-** [[info:sicp#Chapter 1][Building Abstractions With Procedures]]
+** Building Abstractions With Procedures
+[[info:sicp#Chapter 1]]
+
+This chapter delves into the idea of a "computational process".
 
 - <<Process, data, and program>> :
   - process :: beings that inhabits a computer
@@ -155,7 +172,8 @@
   - Visualize process behaviour in advance
 
 
-*** [[info:sicp#1-1][The Elements of Programming]]
+*** The Elements of Programming
+[[info:sicp#1-1]]
 
 - On programming languages:
 
@@ -177,32 +195,26 @@
     - Means of abstraction: by which compound elements can be *named*
       and manipulated as units.
 
-    :personal-note:
-    Here we are reasonating about ‘processes’ (not about data, or data
-    structures, for example).  When it’s said about primitive
-    expressions that they are entities/elements, the meaning is of
-    objects that produce values when ‘evaluated’.
-    :end:
-
     This dynamic objects can be combined to make compound evaluable
     objects, and abstracted with names to reffer to the compound
-    expression with a name.
+    expression with a single name.
 
   - Altough the same is also true about data, programming languages
     should provide these mechanisms for both using / describing /
     defining and combining data and procedures.
 
 
-**** [[info:sicp#1-1-1][Expressions]]
+**** Expressions
+[[info:sicp#1-1-1]]
 
 - [[expression]] (in glossary)
 
-- An statement/description that can be evaluated, ie, reduced to a
-  single value.
+- An expression is an statement/description that can be evaluated, ie,
+  reduced to a single value.
 
 - There are <<primitive expressions>> :
 
-  - Representing numbers: for integers, the numbers typed as
+  - Eg, those representing numbers: for integers, the numbers typed as
     themselves, evaluate to those numbers:
 
     #+begin_src scheme
@@ -212,8 +224,8 @@
     #+RESULTS:
     : 27
 
-  - representing procedures: for example, the procedure to add ‘+’
-    is a primitive procedure.
+  - Or e.g., those representing procedures, such as the add procedure
+    ‘+’ which is a primitive procedure.
 
     #+begin_src scheme
       +
@@ -249,16 +261,10 @@
     represent a complex idea.  The framework for thinking about
     processes: define simple ideas, define a way to combine them,
     create complex ideas through the combinations.
-
-    It makes me remember of factoring in math.  You can think of
-    big numbers as the product of their prime factors.  This
-    decomposition can help us: by performing easier steps first (for
-    example, canceling factors by divisors), calculating the result
-    (that is, evaluating) becomes much easier.
     :end:
 
   - Prefix notation has the following advantages in regarding to
-    procedure application <<prefix-notation-advantages>> :
+    procedure application: <<prefix-notation-advantages>>
 
     - Being able to accomodate an arbitrary number of arguments.
 
@@ -269,12 +275,17 @@
 
       This applies for any operation.
 
-    - Unambigous order of operations: The operator is always the first
-      element, and each operation is always delimited.
+    - Easier evaluation model, due to uniformity
 
-      In infix notation, we require to know the arity of each
-      operation, and we need parenthesis to override the natural
-      order of each operation.  For example:
+      #+begin_quote
+      A second advantage of prefix notation is that it extends in a
+      straightforward way to allow combinations to be nested, that is,
+      to have combinations whose elements are themselves combinations
+      #+end_quote
+
+      In programming languages with infix notation, we require to know
+      the arity of each operation, and we need parenthesis to override
+      the natural order of each operation.  For example:
 
       #+begin_src python
         return 1 + 2 * 3 - 1 / 2
@@ -283,11 +294,15 @@
       #+RESULTS:
       : 6.5
 
-      The general rule is, first multiply and divide in the order of
-      appareance, then add and substract in order of appearance.
+      To evaluate this we would nee to follow the general rules of
+      math, that is, first multiply and divide in the order of
+      appareance, then add and substract in order of appearance.  This
+      gets more complicated with larger expressions, with each
+      operator having it’s own precedence rules.
 
-      In prefix notation theres no need to know arity, every operation
-      is delimited:
+      In lisp, due to the delimited procedures, the use of prefix
+      notation creates a simple and straightforward evaluation model,
+      that is uniform and unambiguos:
 
       #+begin_src scheme
         (- (+ 1
@@ -298,12 +313,18 @@
       #+RESULTS:
       : 13/2
 
+      We don’t need to know arity, we just follow recursively the same
+      evaluation rules, i.e., first element is procedure, rest are
+      arguments.  We can evaluate each sub expression at a time
+      without problems.
+
 - The interpreter works by evaluating expressions one and a time, and
   printing their results.  That is why it’s said that it works in a
   ‘read-eval-print’ loop, also know as ‘repl’
 
 
-**** [[info:sicp#1-1-2][Naming and the Environment]]
+**** Naming and the Environment
+[[info:sicp#1-1-2]]
 
 - Languages allow to /refer/ to computational objects *by name*.
 
@@ -316,20 +337,22 @@
   computational object.
 
   :personal-note:
-  Its worth noting that just as in real life, the word is no the thing
-  (the word "dog" is not the dog), its just used to refer to it.
+  It’s worth noting that just as in real life, the word is not the thing
+  (the word "dog" is not the dog), it’s just used to refer to it.
   Thats why the name can also be called a symbol; as in, symbols
   refers to things, as in, the symbol "dog" refers to a dog.
   :end:
 
 - We should ask ourselves, what means do any specific language
-  provides for naming computational objects objects.
+  provides for naming computational objects.
 
   In scheme we use ‘define’:
 
   #+begin_src scheme
+    ; use ‘define’ for naming the object ‘2’ with the name ‘size’
     (define size 2)
-    size
+    ; use the name ‘size’ to reffer to the object ‘2’
+    size ;; => 2
   #+end_src
 
   #+RESULTS:
@@ -349,22 +372,101 @@
 
 
 **** Evaluating Combinations
+[[info:sicp#1-1-3][sicp#1-1-3]]
 
-TODO: refactor this
-the combination’s result value is obtained by evaluating each
-expression of the combination, and applying the first
-element’s value (the operation) to the arguments (the value
-of the rest of the operators, when evaluated).
+Chapter goal: Thinking procedurally, dealing with issues related to
+it.
 
-Personal note: This is not so different of other programming
-languages with infix notation, ~1 + 2 + 3 + 4 + 5~, the add
-operation takes two arguments, the expression ‘1 + 2’ evaluates
-the left side, the right side, and /then/ applies the addition on
-the arguments.
+Case: /The interpreter/.  In order to evaluate combinations *it
+follows a procedure*: <<general evaluation rule>>
 
+#+begin_quote
+To evaluate a combination, do the following:
+
+  1. Evaluate the subexpressions of the combination.
+
+  2. Apply the procedure that is the value of the leftmost
+     subexpression (the operator) to the arguments that are the
+     values of the other subexpressions (the operands).
+#+end_quote
+
+From this procedure description we can note important things about
+processes in general:
+
+- In order to evaluate a combination, first we need to evaluate each
+  element of the combination.  Thus the rule is said to be
+  *recursive*; it’s defined in terms of itself.
+
+  A recursive definition can succintly handle complex cases.  The
+  simple rule describes perfectly the steps for evaluating any deep
+  nested combination such as this:
+
+  #+begin_src scheme
+   (* (+ 2 (* 4 6))
+      (+ 3 5 7))
+  #+end_src
+
+  Recursion is *very* powerful for dealing with tree like objects.
+
+- The type of process of the previous example can be represented by a
+  tree, where each combination is a node with branches for the
+  operator and it’s operands:
+
+  #+begin_example
+      390
+      /|\____________
+     / |             \
+    ,*  26            15
+       /|\            |
+      / | \         // \\
+     +  2  24      / |  | \
+           /|\    +  3  5  7
+          / | \
+         ,*  4  6
+  #+end_example
+
+  From this representation we can note that:
+
+  - Terminal nodes (nodes without branches) are either operators or
+    primitives.
+
+  - We can /see/ how the values "percolate" upwards, from terminal nodes
+    to higher levels.  This type of process is called "tree
+    accumulation".  The evaluation rule is an example of tree
+    accumulation.
+
+- The repeated application of the first step will inevitable lead us
+  to the point of evaluating non-combinations, such as primitives or
+  names.  These are evaluated as follows:
+
+  - Number literals represent themselves
+
+  - Operations are machine operations (for example add)
+
+  - Names’s values are taken from the associated objects in the
+    environment.  Thus the environment determines the meaning of
+    symbols.
+
+- This general rule doesnt hold for everything.
+
+  For Example: ~(define x 3)~ doesnt apply ~define~ to both ~x~ and ~3~. ~x~ has
+  no value prior of ~define~; ~x~ is meaningful only after ~define~
+
+  All of these exceptions are called *special forms* <<special form>> :
+
+  - Each one has it’s own rules / order of evaluation.
+
+- The set of all types of expressions with their evaluation rules
+  constitute the *syntax* of the language
+
+  - Lisp is simpler here, because:
+    - One general evaluation rule
+    - Small set of special forms with their own rules
 
 
 **** Compound Procedures
+[[info:sicp#1-1-4][sicp#1-1-4]]
+
 
 **** The Substitution Model for Procedure Application
 
