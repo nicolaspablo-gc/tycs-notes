@@ -195,14 +195,6 @@ This chapter delves into the idea of a "computational process".
     - Means of abstraction: by which compound elements can be *named*
       and manipulated as units.
 
-    This dynamic objects can be combined to make compound evaluable
-    objects, and abstracted with names to reffer to the compound
-    expression with a single name.
-
-  - Altough the same is also true about data, programming languages
-    should provide these mechanisms for both using / describing /
-    defining and combining data and procedures.
-
 
 **** Expressions
 [[info:sicp#1-1-1]]
@@ -318,7 +310,7 @@ This chapter delves into the idea of a "computational process".
       arguments.  We can evaluate each sub expression at a time
       without problems.
 
-- The interpreter works by evaluating expressions one and a time, and
+- The interpreter works by evaluating expressions one at a time, and
   printing their results.  That is why it’s said that it works in a
   ‘read-eval-print’ loop, also know as ‘repl’
 
@@ -406,7 +398,7 @@ processes in general:
       (+ 3 5 7))
   #+end_src
 
-  Recursion is *very* powerful for dealing with tree like objects.
+  Recursion is *very* powerful for dealing with tree-like objects.
 
 - The type of process of the previous example can be represented by a
   tree, where each combination is a node with branches for the
@@ -467,10 +459,289 @@ processes in general:
 **** Compound Procedures
 [[info:sicp#1-1-4][sicp#1-1-4]]
 
+Powerful programming languages also provide the means of abstracting
+compound operations and referring to them as a unit.  This will be
+called <<procedure definition>> .
+
+In scheme we also use ‘define’ for this:
+
+#+begin_src scheme
+ ;; defines the ‘square’ procedure, which squares a number ‘x’
+ (define (square x) (* x x))
+#+end_src
+
+, which for this language could be read as (in plain english):
+
+#+begin_example
+ (define (square    x)         (*      x         x))
+   |        |       |           |      |         |
+  To     square  something,  multiply  it  by  itself.
+#+end_example
+
+Notable things:
+
+- Two things happen during ~define~: the creation of the compound
+  procedure ~(* x x)~, and the naming of it as ~square~.  Even though
+  these two are together right now, they don’t need to be together: a
+  procedure can exist without a name, and a name can be unbound to any
+  object.
+
+- Once a procedure is defined, it can be used by its name, just like
+  any other procedure, builtin or not.
+
+  One useful example: using it as a building block for other
+  procedures:
+
+  #+begin_src scheme
+    (define (sum-of-squares x y)
+      (+ (square x) (square y)))
+    ;; later on, when calling this:
+    (sum-of-squares 3 4)
+    ;; the repl prints: 25
+  #+end_src
+
+  The means of abstraction allows for more straightforward use in
+  ~sum-of-squares~.
+
+Worth noting about lisp:  The ~define~ form allows us to use a sequence
+of expressions as its body.  The procedure’s return value becomes the
+value of the last expression evaluated.
+
 
 **** The Substitution Model for Procedure Application
+[[info:sicp#1-1-5][sicp#1-1-5]]
+
+We have answered how evaluation happens for compound procedures: we
+follow the same rule described in [[*Evaluating Combinations]], which
+shortly is:
+
+1. Evaluate all elements.
+
+2. *Apply* the procedure (the first element) to the arguments (the rest
+   of elements)
+
+How does compound procedure application works?  We can use the
+following model:
+
+#+begin_quote
+ To apply a compound procedure to arguments, evaluate the body of
+ the procedure with each formal parameter replaced by the
+ corresponding argument.
+#+end_quote
+
+Given this model, how would application of ~(f 5)~ go?
+
+#+begin_src scheme
+  (define (square x)
+    (* x x))
+
+  (define (sum-of-squares x y)
+    (+ (square x) (square y)))
+
+  (define (f a)
+    (sum-of-squares (+ a 1) (* a 2)))
+
+  (f 5) ; ?
+#+end_src
+
+1. we start by evaluating ~f~ and ~5~:
+
+   : f ;; => (sum-of-squares (+ a 1) (* a 2))
+
+   : 5 ;; => 5
+
+2. we replace the formal parameter ~a~ by ~5~:
+
+   : (sum-of-squares (+ 5 1) (* 5 2))
+
+3. we reapply the same evaluation rules, now to the ~sum-of-squares~
+   combination.  We evaluate the elements:
+
+   : sum-of-squares ;; => (+ (square x) (square y))
+
+   : (+ 5 1) ;; => 6
+
+   : (* 5 2) ;; => 10
+
+4. In ~sum-of-squares~ we substitute formal parameters ~x~ by ~6~ and ~y~ by ~10~:
+
+   : (+ (square 6) (square 10))
+
+5. We evaluate the elements:
+
+   : + ;; => primitive procedure
+
+   : (square 6) ;; => (* 6 6) => 36
+
+   : (square 10) ;; => (* 10 10) => 100
+
+6. Finally we apply the primitive procedure:
+
+   : (+ 36 100) ;; => 136
+
+
+This way to think about compound procedure application is called the
+<<substitution model>> , which could roughly be understood as ‘to
+understand procedure application, you substitute the formal parameters
+with the operands’.
+
+Two things to stress about this model:
+
+1. Its useful to think about procedure application, not to describe
+   how the interpreter works.
+
+   Normally interpreters don’t substitute the text of the procedure to
+   replace formal parameters with their values; normally an
+   ‘environment’ would be used to bind formal parameters.
+
+2. The substitution is a simplified and incomplete model which is
+   useful to introduce formal thinking of the evaluation process.
+   We’ll see more elaborate models as we go on.
+
+
+***** Applicative order versus normal order
+[[info:sicp#1-1-5][sicp#1-1-5]]
+
+The evaluation model we’ve seen so far worked by evaluating all
+elements, and *then* applying the resulting procedure to the resulting
+arguments.
+
+An alternative evaluation model could evaluate their operands *only
+when their values were needed*.  This method would:
+
+1. Subtitue the formal parameter by the whole unevaluated operand
+   expressions.
+
+2. Evaluate when we obtain an expression with only primitive
+   expressions.
+
+Using this method, the evaluation of ~(f 5)~ becomes:
+
+#+begin_example
+     (sum-of-squares (+ 5 1) (* 5 2))                 ;; 1
+
+     (+    (square (+ 5 1))      (square (* 5 2))  )  ;; 2.  We take the whole operands (+ 5 1) and put them into the body of square.
+
+     (+    (* (+ 5 1) (+ 5 1))   (* (* 5 2) (* 5 2))) ;; 3.  Now we only have primitive expressions.
+
+;; followed by the reductions
+
+     (+         (* 6 6)             (* 10 10))        ;; 4
+
+     (+           36                   100)           ;; 5
+
+                         136                          ;; 6
+
+#+end_example
+
+Things worth noting:
+
+- By substituting the unevaluated operands into the body of compound
+  procedures, the subprocedures ~(+ 5 1)~ and ~(* 5 2)~ now get evaluated
+  *twice* (3).
+
+- This evaluation method is called <<normal order evaluation>> , which
+  is contrasted by <<applicative order evaluation>> , the evaluation
+  method normally used by the interpreter.
+
+- Even though this example returned the same value for both evaluation
+  methods, normal order won’t always produce the same results as
+  applicative order.
+
+- It could be said the lisp interpeter defaults to applicative order
+  evaluation because:
+
+  - This way it avoids unnecesary extra evaluation (For example, don’t
+    evaluate ~(+ 5 1)~ twice)
+
+  - Procedures that can’t be modeled by substitution become much
+    more complicated using normal order.
+
 
 **** Conditional Expressions and Predicates
+[[info:sicp#1-1-6][sicp#1-1-6]]
+
+In order to create more expressive procedures it becomes necessary to
+be able to perform *tests*, and to *take differrent actions* based on the
+result of those tests.
+
+Example:  Calculating absolute value.
+
+Ascii case analysis:
+
+:       /
+:       |   x  if x > 0
+: |x| = <   0  if x = 0
+:       |  -x  if x < 0
+:       \
+
+In lisp, one can use ~cond~ for case analysis.  Quoting the book:
+
+#+begin_src scheme
+  (define (abs x)
+    (cond ((> x 0) x)
+          ((= x 0) 0)
+          ((< x 0) (- x))))
+#+end_src
+
+The general form of a conditional expression is:
+
+#+begin_src scheme
+  (cond (<P1> <E1>)
+        (<P2> <E2>)
+        ...
+        (<PN> <EN>))
+#+end_src
+
+Where each P stands for <<predicate>> , an expression returning a true
+or false value, i.e., a boolean.  Each E is any expression.
+
+~cond~ evaluation work in the following way:
+
+- Evaluate P1.  If P1 evaluates to false value, proceed with the
+  following P.
+
+- If any P returns a true value, then proceed to evaluate the
+  corresponding E expression, wich formally is called the *consequent*
+  expression.  The result of E is the result of the whole ~cond~ form.
+
+- If neither P returns a true value, then ~cond~ has an undefined return
+  value.
+
+- Finally, is worth noting that the word ~else~ can be used in place of
+  a predicate P.  In that case, its understood this is the last clause
+  of the ~cond~ expression.  One could define absolute value as this:
+
+  #+begin_src scheme
+    (define (abs x)
+      (cond ((< x 0) (- x))
+            (else x)))
+  #+end_src
+
+In scheme, another special form one could use is ~if~, which is best
+suited when there are only two cases in case analysis, which has the
+following structure:
+
+#+begin_src scheme
+  (if <PREDICATE> <CONSEQUENT> <ALTERNATIVE>)
+#+end_src
+
+The evaluation works as follow:
+
+1. Evaluate the <PREDICATE> expression.
+
+2. If <PREDICATE> returned a true value, evaluate the <CONSEQUENT> expression.
+
+3. If <PREDICATE> returned a false value, evaluate the <ALTERNATIVE> expression.
+
+We’ve seen some primitve predicates (~<~, ~>~, ~=~).  Also as important are
+some of the *logical composition operators* such as:
+
+- ~and~:
+- ~or~:
+- ~not~:
+
+  To be continued...
 
 **** Example: Square Roots by Newton's Method
 
