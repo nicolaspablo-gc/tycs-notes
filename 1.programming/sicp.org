@@ -659,10 +659,10 @@ Things worth noting:
 
 
 **** Conditional Expressions and Predicates
-[[info:sicp#1-1-6][sicp#1-1-6]]
+[[info:sicp#1-1-6][)sicp#1-1-6]]
 
 In order to create more expressive procedures it becomes necessary to
-be able to perform *tests*, and to *take differrent actions* based on the
+be able to perform *tests*, and to *take different actions* based on the
 result of those tests.
 
 Example:  Calculating absolute value.
@@ -684,7 +684,7 @@ In lisp, one can use ~cond~ for case analysis.  Quoting the book:
           ((< x 0) (- x))))
 #+end_src
 
-The general form of a conditional expression is:
+The general form of a ~cond~ expression is:
 
 #+begin_src scheme
   (cond (<P1> <E1>)
@@ -702,7 +702,7 @@ or false value, i.e., a boolean.  Each E is any expression.
   following P.
 
 - If any P returns a true value, then proceed to evaluate the
-  corresponding E expression, wich formally is called the *consequent*
+  corresponding E expression, which formally is called the *consequent*
   expression.  The result of E is the result of the whole ~cond~ form.
 
 - If neither P returns a true value, then ~cond~ has an undefined return
@@ -737,11 +737,279 @@ The evaluation works as follow:
 We’ve seen some primitve predicates (~<~, ~>~, ~=~).  Also as important are
 some of the *logical composition operators* such as:
 
-- ~and~:
-- ~or~:
-- ~not~:
+- ~and~: ~(and <E1> ... <EN>)~
 
-  To be continued...
+  #+begin_quote
+  The interpreter evaluates the expressions <E> one at a time, in
+  left-to-right order.  If any <E> evaluates to false, the value of
+  the `and' expression is false, and the rest of the <E>'s are not
+  evaluated.  If all <E>'s evaluate to true values, the value of the
+  `and' expression is the value of the last one.
+  #+end_quote
+
+- ~or~: ~(or <E1> ... <EN>)~
+
+  #+begin_quote
+  The interpreter evaluates the expressions <E> one at a time, in
+  left-to-right order.  If any <E> evaluates to a true value, that
+  value is returned as the value of the `or' expression, and the
+  rest of the <E>'s are not evaluated.  If all <E>'s evaluate to
+  false, the value of the `or' expression is false.
+  #+end_quote
+
+- ~not~: ~(not <E>)~
+
+  #+begin_quote
+  The value of a `not' expression is true when the expression <E>
+  evaluates to false, and false otherwise.
+  #+end_quote
+
+:personal-note:
+This is not a very interesting chapter.  It’s good in introducing
+the concepts of predicates, of tests and different evaluation
+branches, and how this increases the language’s expressive power in
+modeling procedures.
+
+The detail of the special forms are boring to take note of, but
+I assume they’re here to expand our vocabulary / arsenal, and it’s
+interesting to think about how evaluation works with each form, and
+how this simple rules makes the language much more powerful.
+:end:
+
+
+***** Exercise 1.1:  Determining printed result of expressions
+
+#+begin_quote
+Below is a sequence of expressions.  What is the result printed by the
+interpreter in response to each expression?  Assume that the sequence
+is to be evaluated in the order in which it is presented.
+#+end_quote
+
+#+begin_src scheme
+  10
+  ;; Answer: 10
+#+end_src
+
+#+begin_src scheme
+  (+ 5 3 4)
+  ;; Answer: 12
+#+end_src
+
+#+begin_src scheme
+  (- 9 1)
+  ;; Answer: 8
+#+end_src
+
+#+begin_src scheme
+  (/ 6 2)
+  ;; Answer: 3
+#+end_src
+
+#+begin_src scheme
+  (+ (* 2 4) (- 4 6))
+  ;; Answer: 6
+#+end_src
+
+#+begin_src scheme
+  (define a 3)
+  ;; Answer: a?
+#+end_src
+
+#+begin_src scheme
+  (define b (+ a 1))
+  ;; Answer: b?
+#+end_src
+
+#+begin_src scheme
+  (+ a b (* a b))
+  ;; Answer: 19
+#+end_src
+
+#+begin_src scheme
+  (= a b)
+  ;; Answer: #f
+#+end_src
+
+#+begin_src scheme
+  (if (and (> b a) (< b (* a b)))
+      b
+      a)
+  ;; Answer: 4
+#+end_src
+
+#+begin_src scheme
+  (cond ((= a 4) 6)
+        ((= b 4) (+ 6 7 a))
+        (else 25))
+  ;; Answer: 16
+#+end_src
+
+#+begin_src scheme
+  (+ 2 (if (> b a) b a))
+  ;; Answer: 6
+#+end_src
+
+#+begin_src scheme
+  (* (cond ((> a b) a)
+           ((< a b) b)
+           (else -1))
+     (+ a 1))
+  ;; Answer: 16
+#+end_src
+
+
+***** Exercise 1.2:  Translating into prefix form
+
+#+begin_quote
+Translate the following expression into prefix form.
+
+     5 + 4 + (2 - (3 - (6 + 4/5)))
+     -----------------------------
+            3(6 - 2)(2 - 7)
+#+end_quote
+
+Answer:
+
+#+begin_src scheme
+  (/ (+ 5 4 (- 2 (- 3 (+ 6 (/ 4 5)))))
+     (* 3
+        (- 6 2)
+        (- 2 7)))
+#+end_src
+
+
+***** Exercise 1.3:  Sum of squares of two largest numbers
+
+#+begin_quote
+Define a procedure that takes three numbers as arguments and returns
+the sum of the squares of the two larger numbers.
+#+end_quote
+
+Answer:
+
+#+begin_src scheme
+  (define (square x) (* x x))
+
+  (define (sum-of-squares a b) (+ (square a) (square b)))
+
+(define (sum-of-squares-of-two-largest a b c)
+    (cond ((> a b)
+           ;; a is greather than b, is b greater than c?
+           (if (> b c)
+               ;; c is smallest
+               (sum-of-squares a b)
+               ;; b is smallest
+               (sum-of-squares a c)))
+          ;; a is smaller than b, is it greater than c?
+          ((> a c)
+           ;; c is smallest
+           (sum-of-squares a b))
+          ;; a is smallest
+          (else
+           (sum-of-squares b c))))
+#+end_src
+
+
+***** Exercise 1.4:  Evaluation of compound expressions
+
+#+begin_quote
+Observe that our model of evaluation allows for combinations whose
+operators are compound expressions.  Use this observation to describe
+the behavior of the following procedure:
+
+     (define (a-plus-abs-b a b)
+       ((if (> b 0) + -) a b))
+#+end_quote
+
+Answer:  Using [[*The Substitution Model for Procedure Application]], we
+can call ~a-plus-abs-b~ with any values, for example, 3 and 4, and use
+[[applicative order evaluation]] to resolve as follows:
+
+: (a-plus-abs-b 3 4) ;; evaluate sub expressions first.  We’ll start with operands
+
+: 3 ;; => 3 (evaluates to 3)
+
+: 4 ;; => 4 (evaluates to 4)
+
+: a-plus-abs-b ;; => procedure.  We evaluate the procedure substituting a and b with 3 and 4 (operands)
+
+: ((if (> 4 0) + -) 3 4) ;; evaluate sub expressions.  We’ll start with operands:
+
+: 3 ;; => 3 (evaluates to 3)
+
+: 4 ;; => 4 (evaluates to 4)
+
+: (if (> 4 0) + -) ;; four is greater than zero, evaluate the consequent branch
+
+: + ;; => primitive procedure.  Now apply + to 3 and 4:
+
+: (+ 3 4) ;; => 7
+
+Note that if the second operand would’ve been a negative value, we
+would have evaluated the alternative branch in the if, returning ~-~
+instead of ~+~, which would’ve resulted in ~(- 3 -4)~.  Finally, the
+result would’ve also been ~7~.
+
+
+***** Exercise 1.5:  Applicative and normal order evaluation
+
+#+begin_quote
+Ben Bitdiddle has invented a test to determine whether the interpreter
+he is faced with is using applicative-order evaluation or normal-order
+evaluation.  He defines the following two procedures:
+
+     (define (p) (p))
+
+     (define (test x y)
+       (if (= x 0)
+           0
+           y))
+
+Then he evaluates the expression
+
+     (test 0 (p))
+
+What behavior will Ben observe with an interpreter that uses
+applicative-order evaluation?  What behavior will he observe with an
+interpreter that uses normal-order evaluation?  Explain your answer.
+(Assume that the evaluation rule for the special form `if' is the same
+whether the interpreter is using normal or applicative order: The
+predicate expression is evaluated first, and the result determines
+whether to evaluate the consequent or the alternative expression.)
+#+end_quote
+
+Normal order evaluator would evaluate as this:
+
+#+begin_src scheme
+  (test 0 (p))
+  ;; retrieve the body of test and replace x and y with the complete
+  ;; operands 0 and (p):
+  (if (= 0 0)
+      0
+      (p))
+  ;; if is a primitive, evaluate it:
+  (= 0 0) ;; #t
+  ;; test is true, evaluate consequent expression
+  0 ;; => 0.  zero is the value of (test 0 (p))
+
+#+end_src
+
+Applicative order would evaluate as this:
+
+#+begin_src scheme
+  (test 0 (p))
+  ;; evaluate sub expressions
+  test ;; => procedure
+  0 ;; => 0
+  (p)
+  ;; evaluate sub expressions
+  p => procedure
+  ;; call procedure with args
+  (p)
+  ;; infinite loop, the expression doesn’t has a correct value.
+  ...
+#+end_src
+
 
 **** Example: Square Roots by Newton's Method
 
